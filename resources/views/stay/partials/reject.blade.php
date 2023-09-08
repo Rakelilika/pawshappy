@@ -1,0 +1,71 @@
+<section>
+    <div class="card-header">
+        <h3>Estancias rechazadas:</h3>
+    </div>
+    @if ($tiene_mascota)
+        <p class="text-left">Estancias que te han rechazado:</p>
+        @if ($estancias_rechazadas)
+            @foreach ($estancias_rechazadas as $estancia)
+                <div class="card-body" style="border:1px solid white;">
+                    <p>De la fecha: {{ $estancia['fecha_inicio'] }} a la fecha: {{ $estancia['fecha_fin'] }}</p>
+                    <p>Cuidador : {{ $estancia['nombre_cuidador'] }}</p>
+                    @foreach ($estancia['mascotas'] as $mascota)
+                        <p>Estancia para: <strong class="text-uppercase">{{ $mascota['mascota_nombre'] }}</strong>,
+                            @if ($mascota['mascota_tipo'] == 'otros')
+                                {{ $mascota['mascota_otro'] }}
+                            @else
+                                {{ $mascota['mascota_tipo'] }}
+                            @endif
+                        </p>
+                    @endforeach
+                </div>
+            @endforeach
+        @else
+            <p class="font-italic mt-50">No existen peticiones rechazadas</p>
+        @endif
+    @endif
+
+    @if ($soy_cuidador)
+        <p class="text-left mt-50">Estancias que has rechazado:</p>
+        @if ($estancias_rechazadas_cuidador)
+            @foreach ($estancias_rechazadas_cuidador as $estancia)
+                <div class="card-body" style="border:1px solid white;">
+                    <p>De la fecha: {{ date_format(date_create($estancia['fecha_inicio']), 'd/m/Y') }} a la fecha:
+                        {{ date_format(date_create($estancia['fecha_fin']), 'd/m/Y') }}</p>
+                    <p>Dueño de la mascota : {{ $estancia['nombre_dueno'] }}</p>
+                    @foreach ($estancia['mascotas'] as $mascota)
+                        <p><strong class="text-uppercase">{{ $mascota['mascota_nombre'] }} </strong> Es un
+                            @if ($mascota['mascota_tipo'] == 'otros')
+                                {{ $mascota['mascota_otro'] }}
+                            @else
+                                {{ $mascota['mascota_tipo'] }}
+                            @endif
+                            ,
+                            @if ($mascota['mascota_sexo'] == 0)
+                                macho
+                            @elseif ($mascota['mascota_sexo'] == 1)
+                                hembra
+                            @else
+                                y no esta definido
+                            @endif
+
+                            de tamaño
+                            @if ($mascota['mascota_tamanio'] == 0)
+                                pequeño
+                            @elseif ($mascota['mascota_tamanio'] == 1)
+                                mediano
+                            @else
+                                grande
+                            @endif
+
+                            de raza {{ $mascota['mascota_raza'] }}
+                        </p>
+                    @endforeach
+                    <p>Precio : {{ $estancia['precio'] }}€</p>
+                </div>
+            @endforeach
+        @else
+            <p class="font-italic mt-50">No existen peticiones de estancias</p>
+        @endif
+    @endif
+</section>
